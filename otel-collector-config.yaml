@@ -1,0 +1,26 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  awsxray:
+    endpoint: 0.0.0.0:2000
+    transport: udp
+
+exporters:
+  debug:
+    verbosity: detailed
+  otlphttp:
+    endpoint: "https://<environmentId>.live.dynatrace.com/api/v2/otlp"
+    headers:
+      Authorization: "Api-Token <api-token>"
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp, awsxray]
+      processors: []
+      exporters: [debug, otlphttp]
